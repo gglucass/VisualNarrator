@@ -248,14 +248,10 @@ class StoryMiner:
 		# Possibly a NLP error...
 		if not found_verb:
 		#BC 	main_verb = eval('story.' + str(part) + '.text')[1]
-			# main_verb = eval('story.' + str(part) + '.text')[2]
-			print(eval('story.' + str(part) + '.text'))
-			if str(part) == 'means':
+			if str(part) == 'means' or str.lower(eval('story.' + str(part) + '.text')[1].text) == 'can':
 				main_verb = eval('story.' + str(part) + '.text')[2]
-			elif str(part) == 'ends':
-				main_verb = eval('story.' + str(part) + '.text')[1]
 			else:
-				main_verb = None # ??
+				main_verb = eval('story.' + str(part) + '.text')[1]
 
 		# If the sentence contains no dobj it must be another obj
 		if not found_obj:
@@ -284,7 +280,7 @@ class StoryMiner:
 				story.ends.main_verb.phrase = MinerUtility.get_span(story, mv_phrase, 'ends.text')
 				story.ends.main_verb.type = "II"
 
-		if main_object == story.system.main:
+		if type(main_object) is list or main_object == story.system.main:
 			story = eval('self.get_' + str(part) + '_phrases(story, ' + str(found_mv_phrase) + ', False)')
 		else:
 			story = eval('self.get_' + str(part) + '_phrases(story, ' + str(found_mv_phrase) + ')')
